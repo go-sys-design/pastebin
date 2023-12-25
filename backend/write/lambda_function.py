@@ -9,7 +9,7 @@ logger = logging.getLogger("pastebin-write")
 logger.setLevel(logging.INFO if is_prod else logging.DEBUG)
 
 def lambda_handler(event, context):
-    logger.info("Lambda invoked!", os.environ['PROD'])
+    logger.info("Lambda invoked finally!", os.environ['PROD'])
 
     return {
         'status': 200,
