@@ -1,5 +1,5 @@
 import os
-import jsonpickle
+import json
 import logging
 import boto3
 
@@ -9,9 +9,7 @@ logger = logging.getLogger("pastebin-write")
 logger.setLevel(logging.INFO if is_prod else logging.DEBUG)
 
 def lambda_handler(event, context):
-    logger.info('## ENVIRONMENT VARIABLES\r' + jsonpickle.encode(dict(**os.environ)))
-    logger.info('## EVENT\r' + jsonpickle.encode(event))
-    logger.info('## CONTEXT\r' + jsonpickle.encode(context))
+    logger.info("Lambda invoked!", os.environ['PROD'])
 
     return {
         'status': 200,
