@@ -1,17 +1,42 @@
 import os
 import json
+from datetime import datetime
 import logging
 import boto3
+from uuid import uuid4
 
-is_prod = os.environ['PROD'] == '1'
-
-logger = logging.getLogger("pastebin-write")
-logger.setLevel(logging.INFO if is_prod else logging.DEBUG)
+logger = logging.getLogger("pastebin-write")\
 
 def lambda_handler(event, context):
-    logger.info("Lambda invoked!", os.environ['PROD'])
+    logger.info("Lambda invoked!")
+
+    try:
+        # setup dynamodb
+        resource = boto3.resource('dynamodb')
+        table = resource.Table('pastebin')
+
+        # get parameters
+        pasteId = str(uuid4())
+        userId = event['UserId']
+        createdTimestamp = int(datetime.now().timestamp()*1000)
+
+
+        table.put_item(
+            Item={
+                'PasteId': pasteId,
+                'TimestampCreated': createdTimestamp,
+                'UserId': userId,
+                'c'
+            }
+        )
+
+    except Exception as e:
+        return {
+            'status': 502,
+            'message': e
+        }
 
     return {
         'status': 200,
-        'message': 'working'
+        'message': 'ok'
     }
