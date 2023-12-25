@@ -22,12 +22,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+  
+      # setup AWS
+      - name: setting up aws
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       # zip all directories
       - name: zip all directories
         run: |
-          cd backend/write && zip -r write.zip ./*
-          aws lambda update-function-code --function-name=pastebin-write --zip-file=fileb://write.zip
-
-      
-          
+          cd backend/write && zip -r ../../build/write.zip ./*
+          aws lambda update-function-code --function-name=pastebin-write --zip-file=fileb://build/write.zip
