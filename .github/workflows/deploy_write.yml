@@ -27,7 +27,7 @@ jobs:
       - name: zip all directories
         run: |
           cd backend/write && zip -r write.zip ./*
-          aws lambda update-function-code --function-name=pastebin-write --zip-file=write.zip
+          aws lambda update-function-code --function-name=pastebin-write --zip-file=fileb://write.zip
 
       
           
