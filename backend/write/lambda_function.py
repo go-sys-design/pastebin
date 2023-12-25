@@ -18,25 +18,31 @@ def lambda_handler(event, context):
         # get parameters
         pasteId = str(uuid4())
         userId = event['UserId']
+        rawContent = event['content']
         createdTimestamp = int(datetime.now().timestamp()*1000)
 
-
+        pasteItem = {
+            'PasteId': pasteId,
+            'TimestampCreated': createdTimestamp,
+            'UserId': userId,
+            'RawContent': rawContent,
+            'ContentURL': ''
+        }
         table.put_item(
-            Item={
-                'PasteId': pasteId,
-                'TimestampCreated': createdTimestamp,
-                'UserId': userId,
-                'c'
-            }
+            Item=pasteItem
         )
 
     except Exception as e:
         return {
             'status': 502,
-            'message': e
+            'message': 'some database error occurred',
+            'data': {
+                'error': e
+            }
         }
 
     return {
         'status': 200,
-        'message': 'ok'
+        'message': 'your paste was successfull',
+        'data': pasteItem
     }
